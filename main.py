@@ -4,9 +4,9 @@ import os,json
 from slpp import slpp as lua
 
 #-------------------changeable var below-------------------
-os.chdir('D:\\D我的\\python\\tag\\new')#-----where is the file,will effect the output file's location
+os.chdir('')#-----where is the file,will effect the output file's location
 
-pat='D:\\mc\\HMCL\\原版jar\\21w18a\\data\\minecraft\\tags'#-----where you store the data\minecraft\tags folder in version.jar
+pat=''#-----where you store the data\minecraft\tags folder in version.jar
 
 typeli=['blocks','items','entity_types','fluids','game_events']#------what tags type you want to output
 
