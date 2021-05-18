@@ -1,7 +1,4 @@
-
 import os,json
-
-from slpp import slpp as lua
 
 #-------------------changeable var below-------------------
 os.chdir('')#-----where is the file,will effect the output file's location
@@ -12,10 +9,8 @@ typeli=['blocks','items','entity_types','fluids','game_events']#------what tags 
 
 #-------------------changeable var above-------------------
 
-
 out=open('out.txt','w',encoding='utf-8')
 outjs=open('out.json','w',encoding='utf-8')
-
 
 def sorteddict(dic):
     indic={}
@@ -31,15 +26,35 @@ def sorteddict(dic):
 dic={}
 dic['tag_ori']={}
 dic['tag']={}
+
+jsdic={}
+for root, dirs, files in os.walk(pat, topdown=False):
+    loctp=''
+    fix=''
+    sub=root[len(pat)+1:]
+    if '\\' in sub:
+        loctp=sub.split('\\')[0]
+        fix=sub.split('\\')[1]+'/'
+    else:
+        loctp=sub
+        fix=''
+    for fi in files:
+        if loctp not in jsdic:
+            jsdic[loctp]={}
+        jsdic[loctp][fix+fi]=root+'\\'+fi
 for tp in typeli:
     if tp not in dic['tag_ori']:
         dic['tag_ori'][str(tp)]={}
     #dic['tag_ori'][tp][js]=[]
-    l=os.listdir(pat+'\\'+tp)
+    
+    l=jsdic[tp]
     for js in l:
         if js[0:-5] not in dic['tag_ori'][tp]:
             dic['tag_ori'][tp][js[0:-5]]=[]
-        temp=open(pat+'\\'+tp+'\\'+js,'r')
+        
+            temp=open(jsdic[tp][js],'r')
+
+
         tjs=json.loads(temp.read())
         for key in tjs['values']:
             if js[0:-5] not in dic['tag_ori'][tp]:
@@ -51,9 +66,9 @@ for tp in typeli:
 tempdic={}#记录展开下级标签的标签->id对应关系
 
 for tp in typeli:
-    l=os.listdir(pat+'\\'+tp)
+    l=jsdic[tp]
     for js in l:
-        temp=open(pat+'\\'+tp+'\\'+js,'r')
+        temp=open(jsdic[tp][js],'r')
         tjs=json.loads(temp.read())
 
         
@@ -71,7 +86,15 @@ for tp in typeli:
                         tjs3=json.loads(temp3.read())
                         for key3 in tjs3["values"]:
                             if '#' in key3:
-                                print("标签迭代次数过多\n")
+                                #print("标签迭代次数过多\n")
+                                temp4=open(pat+'\\'+tp+'\\'+key3[11:]+'.json')#四级标签
+                                tjs4=json.loads(temp4.read())
+                                for key4 in tjs4["values"]:
+                                    if '#' in key4:
+                                        print("标签迭代次数过多\n")
+                                    else:
+                                        tempdic[tp][js[0:-5]].append(key4[10:])
+                                temp4.close()
                             else:
                                 tempdic[tp][js[0:-5]].append(key3[10:])
                         temp3.close()
@@ -103,10 +126,6 @@ for tp in typeli:
     for objid in dic['ID'][tp]:
         dic['ID'][tp][objid]=sorted(list(set(dic['ID'][tp][objid])))
 
-#out.write(json.dumps(dic))
-
-out.write(lua.encode(dic))
 outjs.write(json.dumps(dic))
-
-#print(dic)
 out.close()
+outjs.close()
