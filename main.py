@@ -22,7 +22,6 @@ def sorteddict(dic):
         indic2[i]=dic[i]
     return indic2
 
-
 dic={}
 dic['tag_ori']={}
 dic['tag']={}
@@ -51,27 +50,22 @@ for tp in typeli:
     for js in l:
         if js[0:-5] not in dic['tag_ori'][tp]:
             dic['tag_ori'][tp][js[0:-5]]=[]
-        
             temp=open(jsdic[tp][js],'r')
-
-
         tjs=json.loads(temp.read())
         for key in tjs['values']:
             if js[0:-5] not in dic['tag_ori'][tp]:
                 dic['tag_ori'][tp][js[0:-5]]=[]
             dic['tag_ori'][tp][js[0:-5]].append(key)
         temp.close()
-#记录原始标签
+#记录原始标签 write down origin tag
 
-tempdic={}#记录展开下级标签的标签->id对应关系
+tempdic={}#记录展开下级标签的标签->id对应关系 tag to ID
 
 for tp in typeli:
     l=jsdic[tp]
     for js in l:
         temp=open(jsdic[tp][js],'r')
         tjs=json.loads(temp.read())
-
-        
         if tp not in tempdic:
             tempdic[tp]={}
         tempdic[tp][js[0:-5]]=[]
