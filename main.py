@@ -102,7 +102,7 @@ for tp in typeli:
     for tag in tempdic[tp]:
         if tp not in dic['tag']:
             dic['tag'][tp]={}
-        dic['tag'][tp][tag]=sorted(list(set(tempdic[tp][tag])))#去重排序
+        dic['tag'][tp][tag]=sorted(list(set(tempdic[tp][tag])))#去重排序 MC-223843 
         #print(dic['tag'][tp][tag])
     dic['tag'][tp]=sorteddict(dic['tag'][tp])
 
