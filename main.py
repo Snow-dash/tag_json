@@ -1,16 +1,22 @@
-import os,json
+
 
 #-------------------changeable var below-------------------
-os.chdir('')#-----where is the file,will effect the output file's location
+originPath = '' #-----where is the file,will effect the output file's location
 
 pat=''#-----where you store the data\minecraft\tags folder in version.jar
 
 typeli=['blocks','items','entity_types','fluids','game_events']#------what tags type you want to output
 
 #-------------------changeable var above-------------------
+import os,json,sys
 
-out=open('out.txt','w',encoding='utf-8')
-outjs=open('out.json','w',encoding='utf-8')
+sys.path.append(originPath + "\\slpp-23-master")
+
+os.chdir(originPath)
+
+from slpp import slpp as lua
+
+outjs=open('out.txt','w',encoding='utf-8')
 
 def sorteddict(dic):
     indic={}
@@ -21,7 +27,6 @@ def sorteddict(dic):
     for i in indic:
         indic2[i]=dic[i]
     return indic2
-
 
 dic={}
 dic['tag_ori']={}
@@ -51,27 +56,22 @@ for tp in typeli:
     for js in l:
         if js[0:-5] not in dic['tag_ori'][tp]:
             dic['tag_ori'][tp][js[0:-5]]=[]
-        
             temp=open(jsdic[tp][js],'r')
-
-
         tjs=json.loads(temp.read())
         for key in tjs['values']:
             if js[0:-5] not in dic['tag_ori'][tp]:
                 dic['tag_ori'][tp][js[0:-5]]=[]
             dic['tag_ori'][tp][js[0:-5]].append(key)
         temp.close()
-#记录原始标签
+#记录原始标签 write down origin tag
 
-tempdic={}#记录展开下级标签的标签->id对应关系
+tempdic={}#记录展开下级标签的标签->id对应关系 tag to ID
 
 for tp in typeli:
     l=jsdic[tp]
     for js in l:
         temp=open(jsdic[tp][js],'r')
         tjs=json.loads(temp.read())
-
-        
         if tp not in tempdic:
             tempdic[tp]={}
         tempdic[tp][js[0:-5]]=[]
@@ -108,7 +108,7 @@ for tp in typeli:
     for tag in tempdic[tp]:
         if tp not in dic['tag']:
             dic['tag'][tp]={}
-        dic['tag'][tp][tag]=sorted(list(set(tempdic[tp][tag])))#去重排序
+        dic['tag'][tp][tag]=sorted(list(set(tempdic[tp][tag])))#去重排序 MC-223843 
         #print(dic['tag'][tp][tag])
     dic['tag'][tp]=sorteddict(dic['tag'][tp])
 
@@ -126,6 +126,6 @@ for tp in typeli:
     for objid in dic['ID'][tp]:
         dic['ID'][tp][objid]=sorted(list(set(dic['ID'][tp][objid])))
 
-outjs.write(json.dumps(dic))
-out.close()
+outjs.write(lua.encode(dic))
+
 outjs.close()
