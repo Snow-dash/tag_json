@@ -1,16 +1,22 @@
-import os,json
+
 
 #-------------------changeable var below-------------------
-os.chdir('')#-----where is the file,will effect the output file's location
+originPath = '' #-----where is the file,will effect the output file's location
 
 pat=''#-----where you store the data\minecraft\tags folder in version.jar
 
 typeli=['blocks','items','entity_types','fluids','game_events']#------what tags type you want to output
 
 #-------------------changeable var above-------------------
+import os,json,sys
 
-out=open('out.txt','w',encoding='utf-8')
-outjs=open('out.json','w',encoding='utf-8')
+sys.path.append(originPath + "\\slpp-23-master")
+
+os.chdir(originPath)
+
+from slpp import slpp as lua
+
+outjs=open('out.txt','w',encoding='utf-8')
 
 def sorteddict(dic):
     indic={}
@@ -120,6 +126,6 @@ for tp in typeli:
     for objid in dic['ID'][tp]:
         dic['ID'][tp][objid]=sorted(list(set(dic['ID'][tp][objid])))
 
-outjs.write(json.dumps(dic))
-out.close()
+outjs.write(lua.encode(dic))
+
 outjs.close()
