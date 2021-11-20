@@ -1,7 +1,12 @@
 # tag_json
-Use tag json in minecraft's vanilla datapack to create a json that used in minecraft wiki.
+Rely on [https://github.com/IlyaSkriblovsky/slpp-23](this), but changed a little(add `["` and `"]` surround with dict's key part).
 
-Edit main.py before use.
+Use tag json in minecraft's vanilla datapack to create a lua table that used in minecraft wiki.
 
-整理标签json输出为wiki使用的形式
-编辑main.py。填入相关路径，启动main.py，获得文件。
+**Edit main.py before use.**
+
+依赖[https://github.com/IlyaSkriblovsky/slpp-23](这项)py字典对象与lua table的转换模块，输出时为字典的键部分包裹上了`["` 和 `"]`。
+
+整理Minecraft游戏原版数据包的标签json文件输出为wiki使用的形式。
+
+**编辑main.py**，填入相关路径，启动main.py，获得文件。
