@@ -1,4 +1,9 @@
 # tag_json
+
+已重构，[重制版](https://github.com/Snow-dash/MCTag_to_MCWModule)
+
+---------------------------------------------------------------
+
 Rely on [this](https://github.com/IlyaSkriblovsky/slpp-23), but changed a little(add `["` and `"]` surround with dict's key part).
 
 Use tag json in minecraft's vanilla datapack to create a lua table that used in minecraft wiki.
